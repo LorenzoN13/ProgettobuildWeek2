@@ -15,7 +15,7 @@ public class Fattura {
     private int id;
     private String numero;
     private LocalDate data;
-    private BigDecimal importo;
+    private int importo;
     private String numeroFattura;
 
 

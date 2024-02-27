@@ -19,8 +19,10 @@ public class Utente implements UserDetails {
     private int id;
     private String nome;
     private String cognome;
+    @Column(unique = true)
     private String email;
     private String password;
+    @Column(unique = true)
     private String username;
 
     @Enumerated(EnumType.STRING)
