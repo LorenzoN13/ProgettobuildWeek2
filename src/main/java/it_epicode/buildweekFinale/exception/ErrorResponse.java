@@ -17,8 +17,4 @@ public class ErrorResponse {
         this.message = message;
         dataResponse = LocalDateTime.now();
     }
-
-    public static String handleValidationMessages(BindingResult bindingResult){
-        return bindingResult.getAllErrors().stream().map(e -> e.getDefaultMessage()).collect(Collectors.joining(","));
-    }
 }
