@@ -1,57 +1,25 @@
 package it_epicode.buildweekFinale.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
+@Data
 @Entity
+@Table(name = "comuni")
 public class Comune {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenza_comuni")
+    @SequenceGenerator(name = "sequenza_comuni", initialValue = 1, allocationSize = 1)
+    private int id;
     private String nome;
-
     @ManyToOne
-    @JoinColumn(name = "provincia_id")
+    @JoinColumn(name = "id_provincia")
     private Provincia provincia;
 
-    public Comune() {
-    }
+    public Comune(){}
 
-    public Comune(Long id, String nome, Provincia provincia) {
-        this.id = id;
+    public Comune(String nome, Provincia provincia){
         this.nome = nome;
         this.provincia = provincia;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public Provincia getProvincia() {
-        return provincia;
-    }
-
-    public void setProvincia(Provincia provincia) {
-        this.provincia = provincia;
-    }
-
-    @Override
-    public String toString() {
-        return "Comune{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", provincia=" + provincia +
-                '}';
     }
 }
