@@ -1,4 +1,18 @@
-package it_epicode.buildweekFinale.model;
+package it.epicode.bw5.model;
 
+import lombok.Data;
+
+import java.time.LocalDateTime;
+
+@Data
 public class CustomResponse {
+    private String message;
+    private LocalDateTime dataRisposta;
+    private Object response;
+
+    public CustomResponse(String message, Object response){
+        this.message = message;
+        dataRisposta = LocalDateTime.now();
+        this.response = response;
+    }
 }
