@@ -17,6 +17,9 @@ public class Fattura {
     private LocalDate data;
     private int importo;
     private String numeroFattura;
+    @Enumerated(EnumType.STRING)
+    private Stato stato;
+    private LocalDate dataFine;
 
 
     @ManyToOne
