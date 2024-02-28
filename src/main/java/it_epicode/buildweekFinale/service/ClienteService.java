@@ -1,5 +1,6 @@
 package it_epicode.buildweekFinale.service;
 
+import it_epicode.buildweekFinale.exception.BadRequestException;
 import it_epicode.buildweekFinale.exception.NotFoundException;
 import it_epicode.buildweekFinale.model.Cliente;
 import it_epicode.buildweekFinale.model.Indirizzo;
@@ -14,6 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ClienteService {
     @Autowired
@@ -23,7 +26,7 @@ public class ClienteService {
     private DbService dbService;
 
     @Autowired
-    private IndirizzoRepository indirizzoRepository;
+    private IndirizzoService indirizzoService;
 
     public Page<Cliente> getClienti(Pageable pageable){
         return clienteRepository.findAll(pageable);
@@ -35,7 +38,7 @@ public class ClienteService {
 
     @Transactional
     public Cliente save(ClienteRequest clienteRequest) throws Exception {
-
+        checkIndirizzi(clienteRequest.getIndirizzo());
         Cliente cliente = new Cliente();
 
         if (cliente.getIndirizzi().size() > 2) throw new Exception("Puoi inserire massimo due indirizzi.");
@@ -56,21 +59,14 @@ public class ClienteService {
         clienteRepository.save(cliente);
 
         for (IndirizzoRequest indirizzoRequest :clienteRequest.getIndirizzo()){
-
-           Indirizzo indirizzo = new Indirizzo();
-
-           indirizzo.setCliente(cliente);
-           indirizzo.setComune(dbService.getComuneById(indirizzoRequest.getIdComune()));
-           indirizzo.setCap(indirizzoRequest.getCap());
-           indirizzo.setVia(indirizzoRequest.getVia());
-           indirizzo.setCivico(indirizzoRequest.getCivico());
-           indirizzoRepository.save(indirizzo);
+            indirizzoService.save(indirizzoRequest, cliente);
         }
 
         return cliente;
     }
 
     public Cliente update(String partitaIva, ClienteRequest clienteRequest) throws Exception{
+        checkIndirizzi(clienteRequest.getIndirizzo());
         Cliente cliente = getByPartitaIva(partitaIva);
 
         if (cliente.getIndirizzi().size() > 2) throw new Exception("Puoi inserire massimo due indirizzi.");
@@ -91,10 +87,18 @@ public class ClienteService {
         clienteRepository.save(cliente);
 
         for (int i = 0; i < clienteRequest.getIndirizzo().size(); i++){
-            Indirizzo indirizzo = cliente.getIndirizzi().get(i) == null ? new Indirizzo() : null;
+            if (cliente.getIndirizzi().get(i) == null) {
+                indirizzoService.save(clienteRequest.getIndirizzo().get(i), cliente);
+            } else {
+                indirizzoService.update(cliente.getIndirizzi().get(i).getId(), clienteRequest.getIndirizzo().get(i), cliente);
+            }
         }
 
-        return null;
+        if (clienteRequest.getIndirizzo().size() < cliente.getIndirizzi().size()) {
+            indirizzoService.delete(cliente.getIndirizzi().get(1).getId());
+        }
+
+        return cliente;
     }
 
     public void delete(String partitaIva){
@@ -102,5 +106,9 @@ public class ClienteService {
         clienteRepository.delete(cliente);
     }
 
-
+    public void checkIndirizzi(List<IndirizzoRequest> indirizzi){
+        if (indirizzi.isEmpty()) throw new BadRequestException("Deve esserci almeno un indirizzo");
+        if (indirizzi.size() > 2) throw new BadRequestException("Gli indirizzi possono essere al massimo 2");
+        if (indirizzi.size() == 2 && indirizzi.get(0).getSedeIndirizzo() == indirizzi.get(1).getSedeIndirizzo()) throw new BadRequestException("I due indirizzi non possono avere lo stesso tipo di sede");
+    }
 }
