@@ -12,11 +12,17 @@ public class Indirizzo {
     private Long id;
     private String via;
     private String civico;
-    private String localita;
+
+    @ManyToOne
+    @JoinColumn(name = "id_comune")
+    private Comune comune;
+
     private String cap;
 
     @ManyToOne
     @JoinColumn(name = "id_cliente")
     private Cliente cliente;
+
+
 
 }

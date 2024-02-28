@@ -55,7 +55,7 @@ public class ClienteRequest {
     @NotNull(message = "tipo obbligatorio")
     private Tipo tipo;
 
-    @NotNull(message = "indirizzo obbligatorio")
-    private List<Indirizzo> indirizzo;
+    @NotNull(message = "indirizzo obbligatorio ")
+    private List<IndirizzoRequest> indirizzo;
 
 }

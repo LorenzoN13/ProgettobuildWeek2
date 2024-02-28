@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface IndirizzoRepository extends JpaRepository<Indirizzo, Integer>, PagingAndSortingRepository<Indirizzo,Integer> {
 
+
+
 }

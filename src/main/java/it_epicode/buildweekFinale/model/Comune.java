@@ -3,6 +3,8 @@ package it_epicode.buildweekFinale.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Entity
 @Table(name = "comuni")
@@ -15,6 +17,9 @@ public class Comune {
     @ManyToOne
     @JoinColumn(name = "id_provincia")
     private Provincia provincia;
+
+    @OneToMany(mappedBy = "comune")
+    private List<Indirizzo> indirizzi;
 
     public Comune(){}
 

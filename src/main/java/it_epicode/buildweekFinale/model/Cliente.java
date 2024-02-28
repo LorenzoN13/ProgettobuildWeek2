@@ -16,6 +16,7 @@ public class Cliente {
 
     private int id;
     private String ragioneSociale;
+    @Column(unique = true)
     private String partitaIva;
     @Column(unique = true)
     private String email;
