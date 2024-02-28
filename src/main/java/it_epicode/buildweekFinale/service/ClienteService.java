@@ -4,6 +4,7 @@ import it_epicode.buildweekFinale.exception.BadRequestException;
 import it_epicode.buildweekFinale.exception.NotFoundException;
 import it_epicode.buildweekFinale.model.Cliente;
 import it_epicode.buildweekFinale.model.Indirizzo;
+import it_epicode.buildweekFinale.model.Utente;
 import it_epicode.buildweekFinale.repository.ClienteRepository;
 import it_epicode.buildweekFinale.repository.IndirizzoRepository;
 import it_epicode.buildweekFinale.request.ClienteRequest;
@@ -110,5 +111,11 @@ public class ClienteService {
         if (indirizzi.isEmpty()) throw new BadRequestException("Deve esserci almeno un indirizzo");
         if (indirizzi.size() > 2) throw new BadRequestException("Gli indirizzi possono essere al massimo 2");
         if (indirizzi.size() == 2 && indirizzi.get(0).getSedeIndirizzo() == indirizzi.get(1).getSedeIndirizzo()) throw new BadRequestException("I due indirizzi non possono avere lo stesso tipo di sede");
+    }
+
+    public Cliente setlogo(String partitaIva, String s) throws NotFoundException {
+        Cliente cliente = getByPartitaIva(partitaIva);
+        cliente.setLogoAziendale(s);
+        return clienteRepository.save(cliente);
     }
 }
