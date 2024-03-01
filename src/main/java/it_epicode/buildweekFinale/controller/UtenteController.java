@@ -24,6 +24,7 @@ import java.util.HashMap;
 
 
 @RestController
+@RequestMapping("/utenti")
 public class UtenteController {
     @Autowired
     private Cloudinary cloudinary;
@@ -32,7 +33,7 @@ public class UtenteController {
     @Autowired
     private JavaMailSenderImpl JMS;
 
-    @GetMapping
+    @GetMapping("")
     public ResponseEntity<DefaultResponse> getAll(Pageable pageable){
         return DefaultResponse.noMessage(utenteService.findAll(pageable), HttpStatus.OK);
     }

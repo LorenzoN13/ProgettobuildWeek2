@@ -35,7 +35,7 @@ public class AppConfig {
                                                 @Value("${gmail.mail.smtp.starttls.enable}" )String starttls,
                                                 @Value("${gmail.mail.debug}" )String debug,
                                                 @Value("${gmail.mail.from}" )String from,
-                                                @Value("${gmail.mail.from.password}" )String password,
+                                                @Value("${gmail.mail.password}" )String password,
                                                 @Value("${gmail.smtp.ssl.enable}" )String ssl,
                                                 @Value("${gmail.smtp.host}" )String host,
                                                 @Value("${gmail.smtp.port}" )String port){

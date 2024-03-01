@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 @RestController
+@RequestMapping("/clienti")
 public class ClienteController {
 
     @Autowired
