@@ -35,7 +35,7 @@ public class FatturaService {
     }
 
 
-    public Fattura save(FatturaRequest fatturaRequest, String partitaIva){
+    public Fattura save(String partitaIva, FatturaRequest fatturaRequest){
 
         Cliente cliente = clienteService.getByPartitaIva(partitaIva);
         Fattura fattura = new Fattura();
@@ -77,7 +77,7 @@ public class FatturaService {
 
         if (fattura.getData().isAfter(oggi) || fattura.getData().isEqual(oggi)){
             return Stato.EMESSA;
-        } else if (fattura.getDataFine().isBefore(oggi)){
+        } else if (fattura.getDataFine().isAfter(oggi)){
            return Stato.SCADUTA;
         }else {
             return Stato.IN_ATTESA;

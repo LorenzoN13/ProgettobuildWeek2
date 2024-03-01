@@ -9,7 +9,6 @@ import it_epicode.buildweekFinale.service.UtenteService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.context.support.DefaultMessageSourceResolvable;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +36,7 @@ public class UtenteController {
     public ResponseEntity<DefaultResponse> getAll(Pageable pageable){
         return DefaultResponse.noMessage(utenteService.findAll(pageable), HttpStatus.OK);
     }
-    @GetMapping("/{id}")
+    @GetMapping("/{username}")
     public ResponseEntity<DefaultResponse> getByUsername(@PathVariable String username) throws NotFoundException {
         return DefaultResponse.customMessage("Trovato",utenteService.getByUsername(username),HttpStatus.OK);
     }
@@ -47,17 +46,17 @@ public class UtenteController {
         sendEmail(utenteRequest.getEmail());
         return DefaultResponse.customMessage("Creato",utenteService.save(utenteRequest),HttpStatus.CREATED);
     }
-    @PutMapping("/{id}")
+    @PutMapping("/{username}")
     public ResponseEntity<DefaultResponse> update(@PathVariable String username,@RequestBody @Validated UtenteRequest d, BindingResult bR) throws NotFoundException {
         if(bR.hasErrors()) throw new BadRequestException(bR.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).toList().toString());
         return DefaultResponse.customMessage("Aggiornato",utenteService.update(d,username),HttpStatus.OK);
     }
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{username}")
     public ResponseEntity<DefaultResponse> delete(@PathVariable String username) throws NotFoundException {
         utenteService.delete(username);
         return DefaultResponse.noObject("Utente con username=" + username + " eliminato",HttpStatus.OK);
     }
-    @PatchMapping("/upload/{id}")
+    @PatchMapping("/upload/{username}")
     public ResponseEntity<DefaultResponse> upload(@PathVariable String username,@RequestParam("upload") MultipartFile file) throws IOException, NotFoundException {
         String url=(String) cloudinary.uploader().upload(file.getBytes(),new HashMap()).get("url");
         return DefaultResponse.customMessage("ImmagineCaricata",utenteService.setAvatar(username,url),HttpStatus.OK);
