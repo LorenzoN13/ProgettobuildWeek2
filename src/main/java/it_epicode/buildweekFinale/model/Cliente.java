@@ -16,13 +16,17 @@ public class Cliente {
 
     private int id;
     private String ragioneSociale;
+    @Column(unique = true)
     private String partitaIva;
+    @Column(unique = true)
     private String email;
     private LocalDate dataInserimento;
     private LocalDate dataUltimoContatto;
-    private BigDecimal fatturatoAnnuale;
+    private int fatturatoAnnuale;
+    @Column(unique = true)
     private String pec;
     private String telefono;
+    @Column(unique = true)
     private String emailContatto;
     private String nomeContatto;
     private String cognomeContatto;
