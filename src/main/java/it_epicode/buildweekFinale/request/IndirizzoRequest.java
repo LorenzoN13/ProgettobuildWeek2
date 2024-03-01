@@ -1,5 +1,6 @@
 package it_epicode.buildweekFinale.request;
 
+import it_epicode.buildweekFinale.model.SedeIndirizzo;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -20,5 +21,7 @@ public class IndirizzoRequest {
 
     @NotBlank(message = "cap obbligatoria")
     private String cap;
+
+    private SedeIndirizzo sedeIndirizzo;
 
 }

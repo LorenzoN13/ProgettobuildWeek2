@@ -1,4 +1,4 @@
-package it.epicode.bw5.model;
+package it_epicode.buildweekFinale.model;
 
 import lombok.Data;
 
@@ -15,4 +15,5 @@ public class CustomResponse {
         dataRisposta = LocalDateTime.now();
         this.response = response;
     }
+
 }

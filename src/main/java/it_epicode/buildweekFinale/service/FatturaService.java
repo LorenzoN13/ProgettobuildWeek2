@@ -3,6 +3,7 @@ package it_epicode.buildweekFinale.service;
 import it_epicode.buildweekFinale.exception.NotFoundException;
 import it_epicode.buildweekFinale.model.Cliente;
 import it_epicode.buildweekFinale.model.Fattura;
+import it_epicode.buildweekFinale.model.Stato;
 import it_epicode.buildweekFinale.repository.ClienteRepository;
 import it_epicode.buildweekFinale.repository.FatturaRepository;
 import it_epicode.buildweekFinale.request.FatturaRequest;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 
 @Service
 public class FatturaService {
@@ -32,16 +35,19 @@ public class FatturaService {
     }
 
 
-    public Fattura save(FatturaRequest fatturaRequest, String partitaIva){
+    public Fattura save(String partitaIva, FatturaRequest fatturaRequest){
 
         Cliente cliente = clienteService.getByPartitaIva(partitaIva);
         Fattura fattura = new Fattura();
+        
 
         fattura.setCliente(cliente);
+        fattura.setStato(controlloStato(fattura));
         fattura.setData(fatturaRequest.getData());
         fattura.setImporto(fatturaRequest.getImporto());
         fattura.setNumeroFattura(fatturaRequest.getNumeroFattura());
         fattura.setNumero(fatturaRequest.getNumero());
+        fattura.setDataFine(fatturaRequest.getDataFine());
 
         return fatturaRepository.save(fattura);
     }
@@ -56,12 +62,27 @@ public class FatturaService {
         fattura.setImporto(fatturaRequest.getImporto());
         fattura.setNumeroFattura(fatturaRequest.getNumeroFattura());
         fattura.setNumero(fatturaRequest.getNumero());
+        fattura.setStato(fatturaRequest.getStato());
+        fattura.setDataFine(fatturaRequest.getDataFine());
         return fatturaRepository.save(fattura);
     }
 
     public void delete(String numeroFattura){
         Fattura fattura = getByFattura(numeroFattura);
         fatturaRepository.delete(fattura);
+    }
+    
+    public Stato controlloStato(Fattura fattura){
+        LocalDate oggi = LocalDate.now();
+
+        if (fattura.getData().isAfter(oggi) || fattura.getData().isEqual(oggi)){
+            return Stato.EMESSA;
+        } else if (fattura.getDataFine().isAfter(oggi)){
+           return Stato.SCADUTA;
+        }else {
+            return Stato.IN_ATTESA;
+        }
+
     }
 
 }

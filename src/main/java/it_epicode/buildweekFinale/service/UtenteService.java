@@ -10,6 +10,8 @@ import it_epicode.buildweekFinale.repository.UtenteRepository;
 import it_epicode.buildweekFinale.request.UtenteRequest;
 import it_epicode.buildweekFinale.security.JwtTools;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,9 @@ public class UtenteService {
 
     public Utente getByUsername(String username) {
         return utenteRepository.getUtenteByUsername(username).orElseThrow(() -> new NotFoundException("utente non trovato"));
+    }
+    public Page<Utente> findAll(Pageable pageable){
+        return utenteRepository.findAll(pageable);
     }
 
     public Utente save(UtenteRequest utenteRequest){
@@ -48,7 +53,25 @@ public class UtenteService {
         return new LoginResponse(jwtTools.createToken(utente), utente);
     }
 
+    public Utente update(UtenteRequest utenteRequest, String USername){
+        Utente utente = getByUsername(USername);
+
+        utente.setNome(utenteRequest.getNome());
+        utente.setCognome(utenteRequest.getCognome());
+        utente.setEmail(utenteRequest.getEmail());
+        utente.setRuolo(Ruolo.USER);
+        utente.setUsername(utenteRequest.getUsername());
+        utente.setPassword(encoder.encode(utenteRequest.getPassword()));
+        return utenteRepository.save(utente);
+    }
+
     public void delete (String username){
         utenteRepository.delete(getByUsername(username));
+    }
+
+    public Utente setAvatar(String username,String s) throws NotFoundException {
+        Utente utente = getByUsername(username);
+        utente.setAvatar(s);
+        return utenteRepository.save(utente);
     }
 }

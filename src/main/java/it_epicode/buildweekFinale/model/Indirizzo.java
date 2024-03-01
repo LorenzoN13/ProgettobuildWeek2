@@ -9,7 +9,7 @@ import lombok.Data;
 public class Indirizzo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
     private String via;
     private String civico;
 
@@ -18,6 +18,9 @@ public class Indirizzo {
     private Comune comune;
 
     private String cap;
+
+    @Enumerated(EnumType.STRING)
+    private SedeIndirizzo sedeIndirizzo;
 
     @ManyToOne
     @JoinColumn(name = "id_cliente")

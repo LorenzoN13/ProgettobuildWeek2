@@ -1,7 +1,7 @@
 package it_epicode.buildweekFinale.controller;
 
-import it.epicode.bw5.model.CustomResponse;
 
+import it_epicode.buildweekFinale.model.CustomResponse;
 import it_epicode.buildweekFinale.service.DbService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
